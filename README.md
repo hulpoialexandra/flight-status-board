@@ -84,8 +84,6 @@ npm run dev
 Then open:
 http://localhost:5173
 
-```
-
 ---
 
 ## 🚧 Possible Improvements
@@ -106,7 +104,5 @@ components/
 hooks/
 model/
 utils/
-
-```
 
 ```
