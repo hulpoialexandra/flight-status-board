@@ -1,73 +1,112 @@
-# React + TypeScript + Vite
+# ✈️ Flight Status Board
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React application that displays real-time flight information, similar to an airport departure board.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Features
 
-## React Compiler
+- 📊 View flights with:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+  - Flight number
+  - Destination
+  - Status (On Time, Delayed, Cancelled)
+  - Gate
+  - Departure time
 
-## Expanding the ESLint configuration
+- 🔍 Filter flights by status
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- 🧩 Group flights by terminal (or no grouping)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- 🔄 Auto-refresh data
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- ⚠️ Error handling with automatic retry
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- 🎯 Simulated API failures (configurable failure rate)
+
+- 🕒 Last updated timestamp
+
+---
+
+## 🛠 Tech Stack
+
+- React + TypeScript
+- Tailwind CSS
+
+---
+
+## 🧠 Architecture Highlights
+
+- **Separation of concerns**
+
+  - API layer handles data fetching & failure simulation
+  - Custom hook (`useFlights`) manages state & retry logic
+  - UI components are reusable and focused
+
+- **Resilient data fetching**
+
+  - Simulated network failures
+  - Automatic retry mechanism (single retry with delay)
+
+- **Dynamic UI**
+
+  - Reusable table structure
+  - Configurable columns based on grouping
+
+---
+
+## ⚙️ How It Works
+
+- The app fetches flight data from a mocked API
+- A configurable failure rate simulates unreliable networks
+- On failure:
+
+  - The app shows an error state
+  - Automatically retries once after a delay
+
+- Flights can be:
+
+  - Filtered by status
+  - Grouped by terminal or shown as a flat list
+
+---
+
+## 📦 Installation & Running
+
+```bash
+# install dependencies
+npm install
+
+# run the app
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Then open:
+http://localhost:5173
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+---
+
+## 🚧 Possible Improvements
+
+- Add unit tests (Jest / React Testing Library)
+- Persist filters in URL
+- Virtualized list for large datasets
+
+---
+
+## 📁 Project Structure
+
+```
+
+src/
+api/
+components/
+hooks/
+model/
+utils/
+
+```
+
 ```
