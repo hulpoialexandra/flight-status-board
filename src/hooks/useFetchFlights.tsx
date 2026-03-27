@@ -39,7 +39,6 @@ export const useFetchFlights = ({
       setFlights(data);
     } catch (err) {
       console.error(err);
-      setFlights([]);
       setError("Failed to fetch flights");
       setRetrying(true);
 

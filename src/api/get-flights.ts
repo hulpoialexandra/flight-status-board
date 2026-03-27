@@ -19,9 +19,13 @@ export async function fetchFlights(): Promise<Flight[]> {
   return flights;
 }
 
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 export async function fetchFlightsWithFailureSimulation(
   failureRate: number = 0.3
 ) {
+  await delay(3000);
+
   if (Math.random() < failureRate) {
     throw new Error("Simulated error");
   }

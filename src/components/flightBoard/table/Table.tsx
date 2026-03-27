@@ -36,6 +36,27 @@ function Table({ status, groupBy }: TableProps) {
     failureRate,
   });
 
+  const lastUpdatedText = useMemo(
+    () =>
+      lastUpdated
+        ? `Last updated: ${lastUpdated?.toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}`
+        : "",
+    [lastUpdated]
+  );
+
+  const fetchStatus = useMemo(() => {
+    if (error) {
+      if (retrying) {
+        return `${error}. Retrying...`;
+      }
+      return error;
+    }
+    if (loading) return "Fetching...";
+  }, [error, retrying, loading]);
+
   return (
     <div>
       <div className="flex justify-between mb-2">
@@ -51,12 +72,9 @@ function Table({ status, groupBy }: TableProps) {
             className="w-16 px-2 py-1 rounded bg-gray-800 text-white border border-gray-600"
           />
         </div>
-        <div className="text-sm text-gray-400 self-end">
-          Last updated:{" "}
-          {lastUpdated?.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
+        <div className="text-sm text-gray-400 self-end h-[40px] text-right">
+          {lastUpdatedText && <p>{lastUpdatedText}</p>}
+          {fetchStatus && <p>{fetchStatus}</p>}
         </div>
       </div>
       {error && flights.length === 0 ? (
