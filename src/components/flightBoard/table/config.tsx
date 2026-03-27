@@ -20,7 +20,15 @@ export const ALL_COLUMNS: Column[] = [
   {
     key: "time",
     label: "Time",
-    render: (flight) => <DepartureTimeColumn value={flight.time} />,
+    render: (flight) => (
+      <DepartureTimeColumn
+        value={flight.time.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        })}
+      />
+    ),
   },
   {
     key: "gate",

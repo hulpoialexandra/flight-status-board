@@ -6,5 +6,5 @@ export type Flight = {
   status: FlightStatus;
   terminal: string;
   gate: string;
-  time: string;
+  time: Date;
 };

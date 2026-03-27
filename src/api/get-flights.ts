@@ -16,6 +16,7 @@ export async function fetchFlights(): Promise<Flight[]> {
 
   const resData = await res.json();
   const flights = mapFlights(resData as DataResponseType[]);
+  flights.sort((a, b) => a.time.getTime() - b.time.getTime());
   return flights;
 }
 
