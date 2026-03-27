@@ -54,6 +54,19 @@ A React application that displays real-time flight information, similar to an ai
   - Configurable columns based on grouping
 
 ---
+## 📁 Project Structure
+
+```
+
+src/
+api/
+components/
+hooks/
+model/
+utils/
+
+```
+---
 
 ## ⚙️ How It Works
 
@@ -91,18 +104,3 @@ http://localhost:5173
 - Add unit tests (Jest / React Testing Library)
 - Persist filters in URL
 - Virtualized list for large datasets
-
----
-
-## 📁 Project Structure
-
-```
-
-src/
-api/
-components/
-hooks/
-model/
-utils/
-
-```
