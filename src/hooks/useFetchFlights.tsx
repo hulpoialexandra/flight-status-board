@@ -4,6 +4,7 @@ import { fetchFlightsWithFailureSimulation } from "../api/get-flights";
 import type { FlightStatusFilterType, GroupByType } from "../model/filters";
 import { filterFlights } from "../utils/filterFlights";
 import { getGroupedFlights } from "../utils/groupFlights";
+import { compareFlights } from "../utils/compareFlights";
 
 interface UseFetchFlightsProps {
   status: FlightStatusFilterType;
@@ -49,7 +50,7 @@ export const useFetchFlights = ({
       );
       if (controller.signal.aborted) return;
       setLastUpdated(new Date());
-      setFlights(data);
+      setFlights((prev) => (compareFlights(prev, data) ? prev : data));
     } catch (err) {
       if (controller.signal.aborted) return;
       console.error(err);

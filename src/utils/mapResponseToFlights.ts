@@ -19,18 +19,16 @@ const getGateNumber = (id: number): string => {
   return gateNumber.toString();
 };
 
-function getTimeFromId(id: number): Date {
-  const now = new Date();
-
+function getTimeFromId(id: number, now: Date): Date {
   const minutesToAdd = (id * 13) % (6 * 60);
-
-  const future = new Date(now.getTime() + minutesToAdd * 60000);
-
-  return future;
+  return new Date(now.getTime() + minutesToAdd * 60000);
 }
 
 export const mapFlights = (data: DataResponseType[]): Flight[] => {
   if (!data.length) return [];
+  const now = new Date();
+  now.setMinutes(0, 0, 0);
+
   return data.map(
     (d) =>
       ({
@@ -39,7 +37,7 @@ export const mapFlights = (data: DataResponseType[]): Flight[] => {
         status: getStatus(d.id),
         terminal: d.userId.toString(),
         gate: `Gate - ${getGateNumber(d.id)}`,
-        time: getTimeFromId(d.id),
+        time: getTimeFromId(d.id, now),
       } as Flight)
   );
 };
