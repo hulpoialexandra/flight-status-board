@@ -32,7 +32,7 @@ export const useFetchFlights = ({
   );
   const groupedFlights = useMemo(() => {
     if (groupBy === "none") return null;
-    return getGroupedFlights(filteredFlights, groupBy as keyof Flight);
+    return getGroupedFlights(filteredFlights, groupBy);
   }, [filteredFlights, groupBy]);
 
   const loadFlights = useCallback(async () => {

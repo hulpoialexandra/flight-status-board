@@ -8,7 +8,7 @@ import TerminalColumn from "./columns/TerminalColumn";
 
 export const ALL_COLUMNS: Column[] = [
   {
-    key: "flight",
+    key: "flightNumber",
     label: "Flight",
     render: (flight) => <FlightNumberColumn value={flight.flightNumber} />,
   },

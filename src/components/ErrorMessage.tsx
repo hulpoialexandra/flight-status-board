@@ -2,7 +2,7 @@ type Props = {
   message?: string;
 };
 
-function Error({
+function ErrorMessage({
   message = "Something went wrong while loading flights.",
 }: Props) {
   return (
@@ -13,4 +13,4 @@ function Error({
   );
 }
 
-export default Error;
+export default ErrorMessage;

@@ -7,7 +7,7 @@ import type {
 } from "../../../model/filters";
 import { ALL_COLUMNS } from "./config";
 import Loading from "../../Loading";
-import Error from "../../Error";
+import ErrorMessage from "../../ErrorMessage";
 import { useFetchFlights } from "../../../hooks/useFetchFlights";
 
 interface TableProps {
@@ -72,7 +72,7 @@ function Table({ status, groupBy }: TableProps) {
         </div>
       </div>
       {error && flights.length === 0 ? (
-        <Error message={retrying ? `${error}. Retrying...` : error} />
+        <ErrorMessage message={retrying ? `${error}. Retrying...` : error} />
       ) : (
         <>
           <Header columns={columns} />

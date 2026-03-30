@@ -1,6 +1,5 @@
-import type { FlightStatus } from "./flight";
-import type { ColumnKey } from "./table";
+import type { FlightStatus, Flight } from "./flight";
 
 export type FlightStatusFilterType = "all" | FlightStatus;
 
-export type GroupByType = "none" | ColumnKey;
+export type GroupByType = "none" | keyof Flight;
