@@ -23,7 +23,9 @@ export const useFetchFlights = ({
 
   const abortControllerRef = useRef<AbortController | null>(null);
   const retryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  
+  const failureRateRef = useRef(failureRate);
+  failureRateRef.current = failureRate;
+
   const filteredFlights = useMemo(
     () => filterFlights(flights, status),
     [flights, status]
@@ -42,7 +44,7 @@ export const useFetchFlights = ({
       setLoading(true);
       setError(null);
       const data = await fetchFlightsWithFailureSimulation(
-        failureRate,
+        failureRateRef.current,
         controller.signal
       );
       if (controller.signal.aborted) return;
@@ -60,7 +62,7 @@ export const useFetchFlights = ({
 
         try {
           const data = await fetchFlightsWithFailureSimulation(
-            failureRate,
+            failureRateRef.current,
             retryController.signal
           );
           if (retryController.signal.aborted) return;

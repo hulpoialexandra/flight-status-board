@@ -36,26 +36,20 @@ function Table({ status, groupBy }: TableProps) {
     failureRate,
   });
 
-  const lastUpdatedText = useMemo(
-    () =>
-      lastUpdated
-        ? `Last updated: ${lastUpdated?.toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          })}`
-        : "",
-    [lastUpdated]
-  );
+  const lastUpdatedText = lastUpdated
+    ? `Last updated: ${lastUpdated.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      })}`
+    : "";
 
-  const fetchStatus = useMemo(() => {
-    if (error) {
-      if (retrying) {
-        return `${error}. Retrying...`;
-      }
-      return error;
-    }
-    if (loading) return "Fetching...";
-  }, [error, retrying, loading]);
+  const fetchStatus = error
+    ? retrying
+      ? `${error}. Retrying...`
+      : error
+    : loading
+    ? "Fetching..."
+    : undefined;
 
   return (
     <div>
