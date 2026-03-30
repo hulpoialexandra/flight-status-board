@@ -7,8 +7,10 @@ export type DataResponseType = {
   title: string;
 };
 
-export async function fetchFlights(): Promise<Flight[]> {
-  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+export async function fetchFlights(signal?: AbortSignal): Promise<Flight[]> {
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
+    signal,
+  });
 
   if (!res.ok) {
     throw new Error("Failed to fetch flights");
@@ -16,14 +18,14 @@ export async function fetchFlights(): Promise<Flight[]> {
 
   const resData = await res.json();
   const flights = mapFlights(resData as DataResponseType[]);
-  flights.sort((a, b) => a.time.getTime() - b.time.getTime());
-  return flights;
+  return flights.sort((a, b) => a.time.getTime() - b.time.getTime());
 }
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export async function fetchFlightsWithFailureSimulation(
-  failureRate: number = 0.3
+  failureRate: number = 0.3,
+  signal?: AbortSignal
 ) {
   await delay(3000);
 
@@ -31,5 +33,5 @@ export async function fetchFlightsWithFailureSimulation(
     throw new Error("Simulated error");
   }
 
-  return await fetchFlights();
+  return await fetchFlights(signal);
 }

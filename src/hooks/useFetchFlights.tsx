@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Flight } from "../model/flight";
 import { fetchFlightsWithFailureSimulation } from "../api/get-flights";
 import type { FlightStatusFilterType, GroupByType } from "../model/filters";
@@ -21,6 +21,9 @@ export const useFetchFlights = ({
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [retrying, setRetrying] = useState(false);
 
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const retryTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  
   const filteredFlights = useMemo(
     () => filterFlights(flights, status),
     [flights, status]
@@ -31,43 +34,67 @@ export const useFetchFlights = ({
   }, [filteredFlights, groupBy]);
 
   const loadFlights = useCallback(async () => {
+    abortControllerRef.current?.abort();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     try {
       setLoading(true);
       setError(null);
-      const data = await fetchFlightsWithFailureSimulation(failureRate);
+      const data = await fetchFlightsWithFailureSimulation(
+        failureRate,
+        controller.signal
+      );
+      if (controller.signal.aborted) return;
       setLastUpdated(new Date());
       setFlights(data);
     } catch (err) {
+      if (controller.signal.aborted) return;
       console.error(err);
       setError("Failed to fetch flights");
       setRetrying(true);
 
-      setTimeout(async () => {
+      retryTimeoutRef.current = setTimeout(async () => {
+        const retryController = new AbortController();
+        abortControllerRef.current = retryController;
+
         try {
-          const data = await fetchFlightsWithFailureSimulation(failureRate);
+          const data = await fetchFlightsWithFailureSimulation(
+            failureRate,
+            retryController.signal
+          );
+          if (retryController.signal.aborted) return;
           setLastUpdated(new Date());
           setFlights(data);
           setError(null);
         } catch {
+          if (retryController.signal.aborted) return;
           setError("Failed to fetch flights");
         } finally {
-          setRetrying(false);
+          if (!retryController.signal.aborted) {
+            setRetrying(false);
+          }
         }
       }, 2000);
     } finally {
-      setLoading(false);
+      if (!controller.signal.aborted) {
+        setLoading(false);
+      }
     }
-  }, [failureRate]);
-
-  useEffect(() => {
-    const loadInterval = setInterval(loadFlights, 30000);
-
-    return () => clearInterval(loadInterval);
-  }, [loadFlights]);
+  }, []);
 
   useEffect(() => {
     loadFlights();
-  }, []);
+    const loadInterval = setInterval(loadFlights, 30000);
+
+    return () => {
+      clearInterval(loadInterval);
+      abortControllerRef.current?.abort();
+      if (retryTimeoutRef.current) {
+        clearTimeout(retryTimeoutRef.current);
+      }
+    };
+  }, [loadFlights]);
 
   return {
     flights,
