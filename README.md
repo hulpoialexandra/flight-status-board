@@ -104,3 +104,30 @@ http://localhost:5173
 - Add unit tests (Jest / React Testing Library)
 - Persist filters in URL
 - Virtualized list for large datasets
+
+---
+
+## 💬 Notes on Implementation
+
+- **What I implemented myself**
+
+  - Application architecture and component structure
+  - Sorting, filtering and grouping logic
+  - API integration and data mapping
+  - Error / Loading states, retry mechanism and failure simulation
+  - Optimization to prevent unnecessary re-renders (by comparing data)
+  - UI components
+
+- **What I used AI for**
+  
+  - Components styling - Tailwind-based layout and styling
+  - Generating and refining the README file
+  - Code review, small refactors and improvements
+  - Improving utility functions (e.g. generic grouping, time mapping logic)
+   
+- **One decision I'd make differently with more time**
+  
+  - Consider adding a virtualized list to optimize rendering for large datasets.
+  - Introduce a lightweight state management solution (e.g. Zustand) if the app grows in complexity
+  - Improve UI design, responsiveness, and accessibility
+
