@@ -9,6 +9,8 @@ import { ALL_COLUMNS } from "./config";
 import Loading from "../../Loading";
 import ErrorMessage from "../../ErrorMessage";
 import { useFetchFlights } from "../../../hooks/useFetchFlights";
+import FailureRate from "../../FailureRate";
+import FetchStatus from "../../FetchStatus";
 
 interface TableProps {
   status: FlightStatusFilterType;
@@ -54,22 +56,14 @@ function Table({ status, groupBy }: TableProps) {
   return (
     <div>
       <div className="flex justify-between mb-2">
-        <div className="flex items-center gap-2 text-sm text-gray-300">
-          <label>Failure rate:</label>
-          <input
-            type="number"
-            min={0}
-            max={1}
-            step={0.1}
-            value={failureRate}
-            onChange={(e) => setFailureRate(Number(e.target.value))}
-            className="w-16 px-2 py-1 rounded bg-gray-800 text-white border border-gray-600"
-          />
-        </div>
-        <div className="text-sm text-gray-400 self-end h-[40px] text-right">
-          {lastUpdatedText && <p>{lastUpdatedText}</p>}
-          {fetchStatus && <p>{fetchStatus}</p>}
-        </div>
+        <FailureRate
+          failureRate={failureRate}
+          setFailureRate={setFailureRate}
+        />
+        <FetchStatus
+          lastUpdatedText={lastUpdatedText}
+          fetchStatus={fetchStatus}
+        />
       </div>
       {error && flights.length === 0 ? (
         <ErrorMessage message={retrying ? `${error}. Retrying...` : error} />
