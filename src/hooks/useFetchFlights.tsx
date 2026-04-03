@@ -68,7 +68,7 @@ export const useFetchFlights = ({
           );
           if (retryController.signal.aborted) return;
           setLastUpdated(new Date());
-          setFlights(data);
+          setFlights((prev) => (compareFlights(prev, data) ? prev : data));
           setError(null);
         } catch {
           if (retryController.signal.aborted) return;
